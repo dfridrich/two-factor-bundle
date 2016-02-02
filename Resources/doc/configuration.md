@@ -1,9 +1,10 @@
 Configuration
 =============
 
-For detailed information see the documentation of the authentication methods.
+For detailed information see the documentation of the authentication methods, [Google Auth](google.md) and [Email](email.md).
 
 ```yaml
+# app/config/config.yml
 scheb_two_factor:
 
     # Trusted computer feature
@@ -36,9 +37,8 @@ scheb_two_factor:
         enabled: true                  # If Google Authenticator should be enabled, default false
         server_name: Server Name       # Server name used in QR code
         issuer: Issuer Name            # Issuer name used in QR code
-        template: AcmeDemoBundle:Authentication:form.html.twig # Template used to render the authentication form
-        email_template: AcmeDemoBundle:Email:qr.html.twig      # Template used to render email with QR code
-    
+        template: AcmeDemoBundle:Authentication:form.html.twig   # Template used to render the authentication form
+
     # The service which is used to persist data in the user object. By default Doctrine is used. If your entity is
     # managed by something else (e.g. an API), you have to implement a custom persister
     persister: scheb_two_factor.persister.doctrine
@@ -46,10 +46,20 @@ scheb_two_factor:
     # If your Doctrine user object is managed by a model manager, which is not the default one, you have to
     # set this option. Name of entity manager or null, which uses the default one.
     model_manager_name: ~
-    
+
     # The security token classes, which trigger two-factor authentication.
     # By default the bundle only reacts to Symfony's username+password authentication. If you want to enable
     # two-factor authentication for other authentication methods, add their security token classes.
     security_tokens:
         - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+```
+
+The bundle comes with a security voter, which checks if the two-factor-auth is completed, if not it will deny access.
+This requires a change in the security configuration:
+
+```
+# app/config/security.yml
+security:
+    access_decision_manager:
+        strategy: unanimous
 ```

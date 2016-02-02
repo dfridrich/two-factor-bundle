@@ -1,4 +1,5 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -8,28 +9,31 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
 class ProviderCompilerPass implements CompilerPassInterface
 {
-
     /**
-     * Collect registered two-factor providers and register them
+     * Collect registered two-factor providers and register them.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {
-        if (! $container->hasDefinition("scheb_two_factor.provider_registry")) {
+        if (!$container->hasDefinition('scheb_two_factor.provider_registry')) {
             return;
         }
 
-        $definition = $container->getDefinition('scheb_two_factor.provider_registry');
+        $registryDefinition = $container->getDefinition('scheb_two_factor.provider_registry');
+        $voterDefinition = $container->getDefinition('scheb_two_factor.security_voter');
         $taggedServices = $container->findTaggedServiceIds('scheb_two_factor.provider');
         $references = array();
+        $providerNames = array();
         foreach ($taggedServices as $id => $attributes) {
             if (!isset($attributes[0]['alias'])) {
                 throw new InvalidArgumentException('Tag "scheb_two_factor.provider" requires attribute "alias" to be set.');
             }
             $name = $attributes[0]['alias'];
             $references[$name] = new Reference($id);
+            $providerNames[] = $name;
         }
-        $definition->replaceArgument(1, $references);
+        $registryDefinition->replaceArgument(1, $references);
+        $voterDefinition->replaceArgument(1, $providerNames);
     }
 }

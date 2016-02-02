@@ -1,7 +1,7 @@
 Trusted Computers
 =================
 
-You can give users the possibility to flag machines as "trusted computers", which means the two-factor process will be skipped, once successful.
+You can give users the possibility to flag machines as "trusted computers", which means the two-factor process will be skipped after being executed successfully once.
 
 You have to enable this feature in your `config.yml`:
 
@@ -13,10 +13,9 @@ scheb_two_factor:
         cookie_lifetime: 5184000    # Lifetime of the trusted computer cookie
 ```
 
-Also your user entity has to implement `Scheb\TwoFactorBundle\Model\TrustedComputerInterface`. Here's an example:
+Also, your user entity has to implement `Scheb\TwoFactorBundle\Model\TrustedComputerInterface`. Here's an example:
 
 ```php
-
 namespace Acme\DemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -24,7 +23,6 @@ use Scheb\TwoFactorBundle\Model\TrustedComputerInterface;
 
 class User implements TrustedComputerInterface
 {
-
     /**
      * @ORM\Column(type="json_array")
      */
@@ -48,4 +46,3 @@ class User implements TrustedComputerInterface
     }
 }
 ```
-

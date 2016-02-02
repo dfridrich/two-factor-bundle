@@ -1,7 +1,7 @@
 scheb/two-factor-bundle
 =======================
 
-This Symfony2 bundle provides two-factor authentication for your website.
+This Symfony bundle provides two-factor authentication for your website.
 
 By enabling the bundle it will hook into the authentication process and listen for authentication events. If the user entity supports two-factor authentication, it will not grant access until the user enters a valid authentication code.
 
@@ -25,7 +25,7 @@ The bundle supports the following authentication methods out of the box:
 
 ## Custom authentication methods ##
 
-If you want to implement you own custom authentication method (e.g. SMS code, PIN), you can do so by creating a two-factor provider. [Read more](custom.md).
+If you want to implement you own custom authentication method (e.g. SMS code, PIN), you can do so by creating a two-factor provider, you can read more on how to create a custom authentication method [here](custom.md).
 
 ## Multi-level Authentication ##
 
